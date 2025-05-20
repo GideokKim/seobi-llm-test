@@ -81,4 +81,30 @@ alembic/versions/*.py
 !alembic/versions/.gitkeep
 
 # Project specific
-app/*/*/__pycache__/ 
+app/*/*/__pycache__/
+
+# PostgreSQL configuration
+postgresql.conf
+pg_hba.conf
+init-pgvector.sh
+
+# Docker
+.docker/
+docker-compose.override.yml
+
+# Local development
+*.local
+local_settings.py
+local_config.py
+
+# Database dumps and backups
+*.dump
+*.backup
+*.bak
+*.sql
+!migrations/*.sql
+
+# Cache and temporary files
+.cache/
+tmp/
+temp/ 
