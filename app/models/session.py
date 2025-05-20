@@ -14,3 +14,7 @@ class Session(db.Model):
     finish_at = db.Column(db.DateTime(timezone=True), nullable=True)
     title = db.Column(db.Text, nullable=True)
     description = db.Column(db.Text, nullable=True)
+    
+    # 관계 추가
+    messages = db.relationship('Message', backref='session', lazy=True, order_by='Message.timestamp')
+    user = db.relationship('User', backref='sessions', lazy=True)
