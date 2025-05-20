@@ -6,17 +6,20 @@ Azure OpenAI를 활용한 LLM 대화를 저장하고 관리하는 Flask 기반 �
 
 ```
 seobi-llm-test/
-├── app/
-│   ├── api/            # API 엔드포인트 (conversations.py, chat.py)
-│   ├── core/           # 핵심 설정 (config.py)
-│   ├── db/             # 데이터베이스 모델 및 설정
-│   ├── schemas/        # 데이터 모델
-│   └── main.py         # Flask 애플리케이션 진입점
-├── migrations/         # 데이터베이스 마이그레이션 파일
-├── alembic/           # Alembic 설정
-├── .env               # 환경 변수 (git에 포함되지 않음)
-├── requirements.txt   # 프로젝트 의존성
-└── README.md         # 프로젝트 문서
+├── app/                   # 애플리케이션 패키지
+│   ├── __init__.py        # Flask 앱 팩토리
+│   ├── config.py          # 핵심 설정
+│   ├── routes/            # API 엔드포인트
+│   │   └── main.py        # 메인 라우트
+│   └── models/            # 데이터베이스 모델 (준비됨)
+├── .venv/                 # 가상환경 (uv)
+├── .git/                  # Git 저장소
+├── .gitignore             # Git 무시 파일 목록
+├── .gitmessage.txt        # Git 커밋 메시지 템플릿
+├── LICENSE                # 라이선스 파일
+├── requirements.txt       # 프로젝트 의존성
+├── run.py                 # Flask 애플리케이션 실행 스크립트
+└── README.md              # 프로젝트 문서
 ```
 
 ## 시작하기
@@ -29,10 +32,16 @@ uv venv
 
 2. 의존성 설치:
 ```bash
-pip install -r requirements.txt
+uv sync
 ```
 
-3. 환경 변수 설정:
+3. Flask 애플리케이션 실행:
+
+```bash
+uv run run.py
+```
+
+4. 환경 변수 설정:
 `.env` 파일을 생성하고 다음 내용을 입력합니다:
 ```env
 AZURE_OPENAI_API_KEY=your-api-key
@@ -43,7 +52,7 @@ SECRET_KEY=your-secret-key
 ENVIRONMENT=development
 ```
 
-4. 데이터베이스 초기화:
+5. 데이터베이스 초기화:
 ```bash
 # 기존 마이그레이션 삭제 (필요한 경우)
 rm -rf migrations/
