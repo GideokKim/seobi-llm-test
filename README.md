@@ -23,10 +23,8 @@ seobi-llm-test/
 
 1. Python 가상환경 생성 및 활성화:
 ```bash
-python -m venv venv
-source venv/bin/activate  # Linux/Mac
-# 또는
-.\venv\Scripts\activate  # Windows
+pip install uv
+uv venv
 ```
 
 2. 의존성 설치:
