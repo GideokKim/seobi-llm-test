@@ -12,7 +12,8 @@ def create_app():
     app.config.from_object('app.config.Config')
     
     # Register blueprints
-    from app.routes import main
+    from app.routes import main, chat
     app.register_blueprint(main.bp)
+    app.register_blueprint(chat.bp)
     
     return app 
