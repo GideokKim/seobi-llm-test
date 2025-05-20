@@ -1,0 +1,28 @@
+FROM postgres:15
+
+# pgvector 설치를 위한 빌드 도구 설치
+RUN apt-get update \
+    && apt-get install -y \
+        build-essential \
+        git \
+        postgresql-server-dev-15 \
+    && rm -rf /var/lib/apt/lists/*
+
+# pgvector 설치
+RUN cd /tmp \
+    && git clone --branch v0.5.1 https://github.com/pgvector/pgvector.git \
+    && cd pgvector \
+    && make \
+    && make install
+
+# PostgreSQL 설정 파일 복사
+COPY postgresql.conf /etc/postgresql/postgresql.conf
+COPY pg_hba.conf /etc/postgresql/pg_hba.conf
+
+# 초기화 스크립트 추가
+COPY init-pgvector.sh /docker-entrypoint-initdb.d/
+RUN chmod +x /docker-entrypoint-initdb.d/init-pgvector.sh
+
+# PostgreSQL 설정 적용
+ENV POSTGRES_INITDB_ARGS="--auth-host=scram-sha-256"
+ENV POSTGRES_HOST_AUTH_METHOD=scram-sha-256 
