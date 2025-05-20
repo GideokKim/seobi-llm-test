@@ -1,13 +1,10 @@
 from flask import Flask, json
 from flask_cors import CORS
-from flask_sqlalchemy import SQLAlchemy
 from dotenv import load_dotenv
+from app.models.db import db
 import os
 
 load_dotenv()
-
-# SQLAlchemy 초기화
-db = SQLAlchemy()
 
 def create_app():
     app = Flask(__name__)
@@ -28,9 +25,11 @@ def create_app():
     db.init_app(app)
     
     # Register blueprints
-    from app.routes import main, chat
+    from app.routes import main, message, session, user
     app.register_blueprint(main.bp)
-    app.register_blueprint(chat.bp)
+    app.register_blueprint(message.message_bp, url_prefix='/api/messages')
+    app.register_blueprint(session.session_bp, url_prefix='/api/sessions')
+    app.register_blueprint(user.user_bp, url_prefix='/api/users')
     
     # 데이터베이스 테이블 생성
     with app.app_context():
