@@ -3,6 +3,7 @@ from app.models import Session, Message, db
 from app.utils.openai_client import get_openai_client, get_completion
 import re
 from app.models.user import User
+from datetime import datetime
 
 session_bp = Blueprint('session', __name__)
 
@@ -155,4 +156,13 @@ def delete_session(session_id):
     session = Session.query.get_or_404(session_id)
     db.session.delete(session)
     db.session.commit()
-    return jsonify({'status': 'success'}), 204 
+    return jsonify({'status': 'success'}), 204
+
+@session_bp.route('/<uuid:session_id>/finish', methods=['POST'])
+def finish_session(session_id):
+    session = Session.query.get_or_404(session_id)
+    if session.finish_at:
+        return jsonify({'status': 'error', 'error': '이미 종료된 세션입니다.'}), 400
+    session.finish_at = datetime.utcnow()
+    db.session.commit()
+    return jsonify({'status': 'success', 'finish_at': session.finish_at.isoformat()}) 

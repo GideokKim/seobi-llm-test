@@ -14,7 +14,12 @@ def create_message():
     user_id = data.get('user_id')
     content = data.get('content')
     role = data.get('role', 'user')
-    
+
+    # 세션 종료 여부 체크
+    session = Session.query.get(session_id)
+    if session and session.finish_at:
+        return jsonify({'status': 'error', 'error': '종료된 세션에는 메시지를 추가할 수 없습니다.'}), 400
+
     message = Message(session_id=session_id, user_id=user_id, content=content, role=role)
     db.session.add(message)
     db.session.commit()
@@ -90,7 +95,7 @@ def delete_message(message_id):
     db.session.commit()
     return jsonify({'status': 'success'}), 204
 
-@message_bp.route('/session/<uuid:session_id>/completion', methods=['POST'])
+@message_bp.route('/session/<uuid:session_id>', methods=['POST'])
 def create_completion(session_id):
     """채팅 완성 API 엔드포인트"""
     try:
