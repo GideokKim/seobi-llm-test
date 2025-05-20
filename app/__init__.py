@@ -1,4 +1,4 @@
-from flask import Flask
+from flask import Flask, json
 from flask_cors import CORS
 from flask_sqlalchemy import SQLAlchemy
 from dotenv import load_dotenv
@@ -12,6 +12,10 @@ db = SQLAlchemy()
 def create_app():
     app = Flask(__name__)
     CORS(app)
+    
+    # JSON 인코딩 설정
+    app.json.ensure_ascii = False
+    app.json.mimetype = 'application/json; charset=utf-8'
     
     # Configuration
     app.config.from_object('app.config.Config')
